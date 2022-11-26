@@ -14,6 +14,84 @@ vector<int> usedChaos(7, 7);
 // 	return random;
 // }
 
+int predictMore(const vector<vector<char>> &board){
+	vector<pair<int, int>> chips;
+	for(int i = 0; i < 7; i++){
+		for(int j = 0; j < 7; j++){
+			if(board[i][j] != '0') chips.push_back(make_pair(i, j));
+		}
+	}
+	for(int i = 0; i < board.size(); i++){
+		for(int j = i + 1; j < board.size(); j++){
+			int x1 = chips[i].first;
+			int y1 = chips[i].second;
+			int x2 = chips[i].first;
+			int y2 = chips[i].second;
+			// int x3 = x1;
+			// int y3 = y2;
+			// int x4 = x2;
+			// int y4 = y1;
+			if(board[x1][y1] == board[x2][y2]){
+				int point = 0;
+				if(abs(x1 - x2) < 3){
+					bool isBlocked = false;
+					for(int k = min(y1, y2); k <= max(y1, y2); k++){
+						if(x1 == x2 && k == max(y1, y2)) break;
+						if(board[x1][k] != '0'){
+							isBlocked = true;
+							break;
+						}
+					}
+					if(!isBlocked){
+						if(x1 == x2 || abs(x1 - x2) == 2) point = 3;
+						else point = 2;
+					}
+					isBlocked = false;
+					for(int k = max(y1, y2); k >= min(y1, y2); k--){
+						if(x1 == x2 && k == min(y1, y2)) break;
+						if(board[x2][k] != '0'){
+							isBlocked = true;
+							break;
+						}
+					}
+					if(!isBlocked){
+						if(x1 == x2 || abs(x1 - x2) == 2) point = max(3, point);
+						else point = max(point, 2);
+					}
+				}
+				if(abs(y1 - y2) < 3){
+					bool isBlocked = false;
+					for(int k = min(x1, x2); k <= max(x1, x2); k++){
+						if(y1 == y2 && k == max(x1, x2)) break;
+						if(board[k][y1] != '0'){
+							isBlocked = true;
+							break;
+						}
+					}
+					if(!isBlocked){
+						if(y1 == y2 || abs(y1 - y2) == 2) point = max(point, 3);
+						else point = max(point, 2);
+					}
+					isBlocked = false;
+					for(int k = max(x1, x2); k >= min(x1, x2); k--){
+						if(y1 == y2 && k == min(x1, x2)) break;
+						if(board[k][y2] != '0'){
+							isBlocked = true;
+							break;
+						}
+					}
+					if(!isBlocked){
+						if(y1 == y2 || abs(y1 - y2) == 2) point = max(3, point);
+						else point = max(point, 2);
+					}
+				}
+				return point;
+			}
+		}
+	}
+	return 0;
+}
+
 int evaluationChaos(const vector<vector<char>> &board){
 	int sum = 0;
 	for(int i = 0; i < 7; i++){
@@ -28,6 +106,7 @@ int evaluationChaos(const vector<vector<char>> &board){
 		for(int i = 0; i < 7; i++) s[i] = board[i][j];
 		sum += calPoint(s, check, 0, 6, false);
 	}
+	sum += predictMore(board);
 	return -sum;
 }
 
