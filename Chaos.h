@@ -7,7 +7,6 @@ using namespace std;
 // vector<int> used(7, 7);
 
 // int calPoint(char s[10], vector<vector<bool>> &check, int l = 0, int r = 6, bool inside = false);
-int predictMore(const vector<vector<char>> &board);
 int evaluationChaos(const vector<vector<char>> &board);
 bool isBoardFull(const vector<vector<char>> &board);
 

@@ -20,6 +20,7 @@ int evaluationOrder(const vector<vector<char>> &board){
 		for(int i = 0; i < 7; i++) s[i] = board[i][j];
 		sum += calPoint(s, check, 0, 6, false);
 	}
+	sum += predictMore(board);
 	return sum;
 }
 
